@@ -74,6 +74,9 @@ services:
         uid: '{{ .UID }}'
         gid: '{{ .GID }}'
     image: ${DDEV_WEBIMAGE}-${DDEV_SITENAME}-built
+    networks:
+      - default
+      - ddev_default
     cap_add:
       - SYS_PTRACE
     working_dir: "{{ .WebWorkingDir }}"
@@ -182,6 +185,9 @@ services:
   dba:
     container_name: ddev-${DDEV_SITENAME}-dba
     image: $DDEV_DBAIMAGE
+    networks:
+      - default
+      - ddev_default
     working_dir: "{{ .DBAWorkingDir }}"
     restart: "{{ if .AutoRestartContainers }}always{{ else }}no{{ end }}"
     labels:
@@ -213,7 +219,7 @@ services:
       retries: 1
 {{end}}
 networks:
-  default:
+  ddev_default:
     name: ddev_default
     external: true
 volumes:
