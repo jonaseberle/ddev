@@ -2541,6 +2541,15 @@ func (app *DdevApp) Stop(removeData bool, createSnapshot bool) error {
 		}
 	}
 
+	// Remove current project network
+	currentNetName := os.Getenv("COMPOSE_PROJECT_NAME") + "_default"
+	err = dockerutil.RemoveNetwork(currentNetName)
+	_, isNoSuchNetwork := err.(*docker.NoSuchNetwork)
+	// If it's a "no such network" there's no reason to report error
+	if err != nil && !isNoSuchNetwork {
+		util.Warning("Unable to remove network %s: %v", currentNetName, err)
+	}
+
 	return nil
 }
 
