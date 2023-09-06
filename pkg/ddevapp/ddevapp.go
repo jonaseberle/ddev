@@ -2542,6 +2542,10 @@ func (app *DdevApp) Stop(removeData bool, createSnapshot bool) error {
 	}
 
 	// Remove current project network
+	// Working around duplicate network creation problem apparently caused by
+	// https://github.com/docker/compose/issues/6532#issuecomment-769263484
+	// see https://github.com/ddev/ddev/issues/5193 and
+	// https://github.com/ddev/ddev/pull/5305
 	currentNetName := os.Getenv("COMPOSE_PROJECT_NAME") + "_default"
 	err = dockerutil.RemoveNetwork(currentNetName)
 	_, isNoSuchNetwork := err.(*docker.NoSuchNetwork)
