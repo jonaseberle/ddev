@@ -47,6 +47,7 @@ func EnsureNetwork(client *docker.Client, name string) error {
 			Name:     name,
 			Driver:   "bridge",
 			Internal: false,
+			Labels:   map[string]string{"ddev": "ddev"},
 		}
 		_, err := client.CreateNetwork(netOptions)
 		if err != nil {
